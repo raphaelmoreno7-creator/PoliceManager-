@@ -99,9 +99,10 @@ grade:"Gardien",
 type:"policier"
 },
 
-"POL-005":{
-nom:"Bienvenue invitée",
-type:"invitée"
+"INV-001":{
+nom:"Invité",
+grade:"Visiteur",
+type:"invite"
 },
 
 "DET-001":{
@@ -136,17 +137,15 @@ if(c.type=="policier"){
 r.innerHTML="🟢<br><br>ACCÈS AUTORISÉ<br><br>"+c.nom+"<br>"+c.grade;
 r.className="valide";
 
+}else if(c.type=="invite"){
+
+r.innerHTML="🟡<br><br>ACCÈS INVITÉ<br><br>"+c.nom+"<br>"+c.grade;
+r.className="valide";
+
 }else{
 
 r.innerHTML="🟢<br><br>DÉTENU RECONNU<br><br>"+c.nom;
 r.className="valide";
-
-}
-
-}else{
-
-r.innerHTML="🔴<br><br>CARTE INCONNUE<br><br>ACCÈS REFUSÉ";
-r.className="refus";
 
 }
 
