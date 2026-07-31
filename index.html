@@ -99,6 +99,78 @@ grade:"Gardien",
 type:"policier"
 },
 
+"POL-005":{
+nom:"Émilie LAMBERT",
+grade:"Lieutenante",
+type:"policier"
+},
+
+"POL-006":{
+nom:"Maxime ROUX",
+grade:"Brigadier-chef",
+type:"policier"
+},
+
+"POL-007":{
+nom:"Laura MOREAU",
+grade:"Gardienne de la paix",
+type:"policier"
+},
+
+"POL-008":{
+nom:"Julien GARNIER",
+grade:"Major",
+type:"policier"
+},
+
+"POL-009":{
+nom:"Sarah DUBOIS",
+grade:"Capitaine",
+type:"policier"
+},
+
+"POL-010":{
+nom:"Alexandre MERCIER",
+grade:"Commandant",
+type:"policier"
+},
+
+"PER-001":{
+nom:"Marie TUTTARD",
+grade:"Agent d'entretien",
+type:"personnel"
+},
+
+"PER-002":{
+nom:"Sophie MARTIN",
+grade:"Secrétaire",
+type:"personnel"
+},
+
+"PER-003":{
+nom:"Thomas DURAND",
+grade:"Technicien informatique",
+type:"personnel"
+},
+
+"PER-004":{
+nom:"Julie BERNARD",
+grade:"Agent d'accueil",
+type:"personnel"
+},
+
+"PER-005":{
+nom:"Claire ROBERT",
+grade:"Psychologue",
+type:"personnel"
+},
+
+"PER-006":{
+nom:"Antoine GIRAUD",
+grade:"Médecin",
+type:"personnel"
+},
+
 "INV-001":{
 nom:"Invité",
 grade:"Visiteur",
@@ -118,6 +190,41 @@ type:"détenu"
 "DET-003":{
 nom:"Chloé Vignalant",
 type:"détenu"
+},
+
+"DET-004":{
+nom:"Kévin MOREL",
+type:"détenu"
+},
+
+"DET-005":{
+nom:"Nicolas GARCIA",
+type:"détenu"
+},
+
+"DET-006":{
+nom:"Anthony RENAUD",
+type:"détenu"
+},
+
+"DET-007":{
+nom:"Jordan PETIT",
+type:"détenu"
+},
+
+"DET-008":{
+nom:"Lucas RICHARD",
+type:"détenu"
+},
+
+"DET-009":{
+nom:"Mathis CHEVALIER",
+type:"détenu"
+},
+
+"DET-010":{
+nom:"Nathan BLANC",
+type:"détenu"
 }
 
 };
@@ -135,6 +242,12 @@ let c=cartes[code];
 if(c.type=="policier"){
 
 r.innerHTML="🟢<br><br>ACCÈS AUTORISÉ<br><br>"+c.nom+"<br>"+c.grade;
+r.className="valide";
+
+}else if(c.type=="personnel"){
+
+r.innerHTML="🟢<br><br>PERSONNEL AUTORISÉ<br><br>"+c.nom+"<br>"+c.grade;
+
 r.className="valide";
 
 }else if(c.type=="invite"){
