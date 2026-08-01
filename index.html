@@ -304,14 +304,7 @@ let date=maintenant.toLocaleDateString("fr-FR");
 
 let heure=maintenant.toLocaleTimeString("fr-FR");
 
-if(cartes[code]){ajouterHistorique(
-date+" - "+heure+
-"<br>"+
-action+
-" | "+
-c.nom+
-"<br>📍 "+lieu
-);
+if(cartes[code]){
 
 let c=cartes[code];
 
@@ -330,6 +323,15 @@ c.grade+
 
 r.className="valide";
 
+ajouterHistorique(
+date+" - "+heure+
+"<br>"+
+action+
+" | "+
+c.nom+
+"<br>📍 "+lieu
+);
+  
 }else if(c.type=="personnel"){
 
 r.innerHTML=
@@ -344,6 +346,15 @@ c.grade+
 "<br><br>📍 "+lieu;
 
 r.className="valide";
+
+ajouterHistorique(
+date+" - "+heure+
+"<br>"+
+action+
+" | "+
+c.nom+
+"<br>📍 "+lieu
+);
 
 }else if(c.type=="invite"){
 
@@ -360,6 +371,15 @@ c.grade+
 
 r.className="valide";
 
+ajouterHistorique(
+date+" - "+heure+
+"<br>"+
+action+
+" | "+
+c.nom+
+"<br>📍 "+lieu
+);
+
 }else{
 
 r.innerHTML=
@@ -372,6 +392,15 @@ c.nom+
 "<br><br>📍 "+lieu;
 
 r.className="valide";
+
+ajouterHistorique(
+date+" - "+heure+
+"<br>"+
+action+
+" | "+
+c.nom+
+"<br>📍 "+lieu
+);
 
 }
 
