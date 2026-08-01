@@ -74,6 +74,32 @@ color:white;
 </div>
 
 <div id="reader"></div>
+<h3>📍 Choisissez un lieu</h3>
+
+<select id="lieu">
+<option>Entrée principale</option>
+<option>Accueil</option>
+<option>Poste de garde</option>
+<option>Bureau du directeur</option>
+<option>Bureau des policiers</option>
+<option>Salle d'audition</option>
+<option>Salle d'interrogatoire</option>
+<option>Armurerie</option>
+<option>Local des preuves</option>
+<option>Infirmerie</option>
+<option>Vestiaires</option>
+<option>Réfectoire</option>
+<option>Cour de promenade</option>
+<option>Cellule A1</option>
+<option>Cellule A2</option>
+<option>Cellule B1</option>
+<option>Cellule B2</option>
+<option>Parloir</option>
+<option>Garage</option>
+<option>Sortie principale</option>
+</select>
+
+<br><br>
 
 <div id="resultat">
 En attente d'un QR Code...
@@ -86,6 +112,7 @@ En attente d'un QR Code...
 <script>
 
 let action = "Entrée";
+let lieu = "";
 
 const cartes = {
 
@@ -243,7 +270,7 @@ type:"détenu"
 
 };
 
-function onScanSuccess(code){
+function onScanSuccess(code){lieu = document.getElementById("lieu").value;
 
 document.getElementById("bip").play();
 
