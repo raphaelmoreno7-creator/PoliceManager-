@@ -241,6 +241,10 @@ Système de contrôle d'accès du commissariat
 🟢 Système opérationnel
 </span>
 
+<button onclick="deconnexion()">
+🚪 Déconnexion
+</button>
+
 </header>
 
 <div style="margin-top:20px;">
@@ -688,7 +692,49 @@ new Html5QrcodeScanner(
 {fps:10, qrbox:250}
 ).render(onScanSuccess);
 
+function connexion(){
+
+let id=document.getElementById("identifiant").value;
+
+let code=document.getElementById("code").value;
+
+
+if(comptes[id] && comptes[id].code==code){
+
+utilisateurConnecte=comptes[id];
+
+
+document.getElementById("connexion").style.display="none";
+
+document.getElementById("application").style.display="block";
+
+
+alert(
+"Bienvenue "+utilisateurConnecte.nom
+);
+
+
+}else{
+
+document.getElementById("erreur").innerHTML=
+"🔴 Identifiant ou code incorrect";
+
+}
+
+}
+
+function deconnexion(){
+
+utilisateurConnecte=null;
+
+document.getElementById("application").style.display="none";
+
+document.getElementById("connexion").style.display="block";
+
+}
+  
 </script>
 
+</div>
 </body>
 </html>
