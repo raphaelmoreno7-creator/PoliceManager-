@@ -204,7 +204,29 @@ font-weight:bold;
 </head>
 
 <body>
+<div id="connexion">
 
+<h1>🚔 POLICE MANAGER PRO</h1>
+
+<h2>Connexion agent</h2>
+
+<input id="identifiant" placeholder="Identifiant (POL-001)">
+
+<br><br>
+
+<input id="code" type="password" placeholder="Code personnel">
+
+<br><br>
+
+<button onclick="connexion()">
+🔐 Connexion
+</button>
+
+<p id="erreur"></p>
+
+</div>
+
+<div id="application" style="display:none;">
 <header>
 
 <h1>🚔 POLICE MANAGER PRO</h1>
@@ -307,62 +329,82 @@ const cartes = {
 
 "POL-001":{
 nom:"Raphaël MORENO",
+code:"4829",
 grade:"Directeur",
-type:"policier"
+type:"policier",
+admin:true
 },
 
 "POL-002":{
 nom:"Hugo FLOTARD",
+code:"7391",
 grade:"Capitaine",
-type:"policier"
+type:"policier",
+admin:false
 },
 
 "POL-003":{
 nom:"Margaud DUCHÊNE",
+code:"6154",
 grade:"Gardienne",
-type:"policier"
+type:"policier",
+admin:false
 },
 
 "POL-004":{
 nom:"Louis FRIGAUD",
+code:"9283",
 grade:"Gardien",
-type:"policier"
+type:"policier",
+admin:false
 },
 
 "POL-005":{
 nom:"Émilie LAMBERT",
+code:"4176",
 grade:"Lieutenante",
-type:"policier"
+type:"policier",
+admin:false
 },
 
 "POL-006":{
 nom:"Maxime ROUX",
+code:"9362",
 grade:"Brigadier-chef",
-type:"policier"
+type:"policier",
+admin:false
 },
 
 "POL-007":{
 nom:"Laura MOREAU",
+code:"5284",
 grade:"Gardienne de la paix",
-type:"policier"
+type:"policier",
+admin:false
 },
 
 "POL-008":{
 nom:"Julien GARNIER",
+code:"7641",
 grade:"Major",
-type:"policier"
+type:"policier",
+admin:false
 },
 
 "POL-009":{
 nom:"Sarah DUBOIS",
+code:"8503",
 grade:"Capitaine",
-type:"policier"
+type:"policier",
+admin:false
 },
 
 "POL-010":{
 nom:"Alexandre MERCIER",
+code:"2917",
 grade:"Commandant",
-type:"policier"
+type:"policier",
+admin:false
 },
 
 "PER-001":{
@@ -379,8 +421,10 @@ type:"personnel"
 
 "PER-003":{
 nom:"Thomas DURAND",
+code:"6648",
 grade:"Technicien informatique",
-type:"personnel"
+type:"personnel",
+admin:true
 },
 
 "PER-004":{
@@ -458,6 +502,8 @@ type:"détenu"
 }
 
 };
+
+let utilisateurConnecte = null;
 
 function onScanSuccess(code){
 
