@@ -321,6 +321,57 @@ Aucun scan enregistré.
 
 </div>
 
+<div id="adminPanel" class="card" style="display:none;">
+
+<h2>👑 Panneau administrateur</h2>
+<hr>
+
+<h3>➕ Ajouter un utilisateur</h3>
+
+<input id="ajoutId" placeholder="Identifiant (POL-011 ou PER-007)">
+
+<br><br>
+
+<input id="ajoutNom" placeholder="Nom complet">
+
+<br><br>
+
+<input id="ajoutGrade" placeholder="Grade ou fonction">
+
+<br><br>
+
+<select id="ajoutType">
+<option value="policier">👮 Policier</option>
+<option value="personnel">🧹 Personnel</option>
+</select>
+
+<br><br>
+
+<input id="ajoutCode" placeholder="Code de connexion">
+
+<br><br>
+
+<label>
+<input type="checkbox" id="ajoutAdmin">
+ Administrateur
+</label>
+
+<br><br>
+
+<button onclick="ajouterUtilisateur()">
+➕ Ajouter l'utilisateur
+</button>
+
+<hr>
+
+<p>Bienvenue administrateur.</p>
+
+<hr>
+
+<div id="listeUtilisateurs"></div>
+
+</div>
+
 <audio id="bip">
 <source src="https://actions.google.com/sounds/v1/cartoon/pop.ogg">
 </audio>
@@ -331,7 +382,13 @@ let action = "Entrée";
 let lieu = "";
 let scanEnCours = false;
 
-const cartes = {
+const cartes = {let cartesSauvegardees = JSON.parse(localStorage.getItem("cartes"));
+
+if(cartesSauvegardees){
+
+Object.assign(cartes, cartesSauvegardees);
+
+}
 
 "POL-001":{
 nom:"Raphaël MORENO",
@@ -696,20 +753,31 @@ new Html5QrcodeScanner(
 
 function connexion(){
 
-let id = document.getElementById("identifiant").value;
-let code = document.getElementById("code").value;
+let id=document.getElementById("identifiant").value;
+let code=document.getElementById("code").value;
 
-if(cartes[id] && cartes[id].code == code){
+if(cartes[id] && cartes[id].code==code){
 
-utilisateurConnecte = cartes[id];
+utilisateurConnecte=cartes[id];
 
 document.getElementById("connexion").style.display="none";
 document.getElementById("application").style.display="block";
 
+if(utilisateurConnecte.admin){
+
+document.getElementById("adminPanel").style.display="block";
+
+afficherListeUtilisateurs();
+
 }else{
 
-document.getElementById("erreur").innerHTML =
-"🔴 Identifiant ou code incorrect";
+document.getElementById("adminPanel").style.display="none";
+
+}
+
+}else{
+
+document.getElementById("erreur").innerHTML="🔴 Identifiant ou code incorrect";
 
 }
 
@@ -717,10 +785,130 @@ document.getElementById("erreur").innerHTML =
 
 function deconnexion(){
 
-utilisateurConnecte = null;
+utilisateurConnecte=null;
 
 document.getElementById("application").style.display="none";
+
 document.getElementById("connexion").style.display="block";
+
+document.getElementById("adminPanel").style.display="none";
+
+}
+
+function afficherListeUtilisateurs(){
+
+let html="<h3>Utilisateurs enregistrés</h3>";
+
+html+="<table border='1' style='width:100%;border-collapse:collapse;'>";
+
+html+="<tr><th>ID</th><th>Nom</th><th>Grade</th><th>Type</th><th>Actions</th></tr>";
+
+for(let id in cartes){
+
+html+="<td><button onclick=\"modifierUtilisateur('"+id+"')\">✏️ Modifier</button></td>";
+
+html+="<tr>";
+
+html+="<td>"+id+"</td>";
+
+html+="<td>"+cartes[id].nom+"</td>";
+
+html+="<td>"+(cartes[id].grade||"-")+"</td>";
+
+html+="<td>"+cartes[id].type+"</td>";
+
+html+="</tr>";
+
+}
+
+html+="</table>";
+
+document.getElementById("listeUtilisateurs").innerHTML=html;
+
+}
+
+function ajouterUtilisateur(){
+
+let id=document.getElementById("ajoutId").value.trim();
+
+let nom=document.getElementById("ajoutNom").value.trim();
+
+let grade=document.getElementById("ajoutGrade").value.trim();
+
+let type=document.getElementById("ajoutType").value;
+
+let code=document.getElementById("ajoutCode").value.trim();
+
+let admin=document.getElementById("ajoutAdmin").checked;
+
+if(id=="" || nom=="" || grade=="" || code==""){
+
+alert("Veuillez remplir tous les champs.");
+
+return;
+
+}
+
+if(cartes[id]){
+
+alert("Cet identifiant existe déjà.");
+
+return;
+
+}
+
+cartes[id]={
+
+nom:nom,
+grade:grade,
+type:type,
+code:code,
+admin:admin
+
+};
+
+sauvegarderCartes();
+
+afficherListeUtilisateurs();
+
+alert("✅ Utilisateur ajouté.");
+
+}
+
+function sauvegarderCartes(){
+
+localStorage.setItem(
+"cartes",
+JSON.stringify(cartes)
+);
+
+}
+
+function modifierUtilisateur(id){
+
+let nouveauNom=prompt("Nom :",cartes[id].nom);
+
+if(nouveauNom==null)return;
+
+let nouveauGrade=prompt("Grade :",cartes[id].grade);
+
+if(nouveauGrade==null)return;
+
+let nouveauCode=prompt("Code :",cartes[id].code);
+
+if(nouveauCode==null)return;
+
+cartes[id].nom=nouveauNom;
+
+cartes[id].grade=nouveauGrade;
+
+cartes[id].code=nouveauCode;
+
+sauvegarderCartes();
+
+afficherListeUtilisateurs();
+
+alert("✅ Utilisateur modifié.");
 
 }
   
