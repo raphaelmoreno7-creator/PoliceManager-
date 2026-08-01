@@ -61,6 +61,18 @@ color:white;
 
 <h1>🚔 Police Manager</h1>
 
+<div style="margin-top:20px;">
+
+<button onclick="action='Entrée'">
+➡️ Entrée
+</button>
+
+<button onclick="action='Sortie'">
+⬅️ Sortie
+</button>
+
+</div>
+
 <div id="reader"></div>
 
 <div id="resultat">
@@ -74,6 +86,8 @@ En attente d'un QR Code...
 <script>
 
 const cartes = {
+
+let action = "Entrée";
 
 "POL-001":{
 nom:"Raphaël MORENO",
@@ -241,7 +255,7 @@ let c=cartes[code];
 
 if(c.type=="policier"){
 
-r.innerHTML="🔵<br><br>ACCÈS AUTORISÉ<br><br>"+c.nom+"<br>"+c.grade;
+r.innerHTML="🔵<br><br>"+action+"<br><br>"+c.nom+"<br>"+c.grade;
 r.className="valide";
 
 }else if(c.type=="personnel"){
