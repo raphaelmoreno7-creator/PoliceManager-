@@ -695,19 +695,16 @@ new Html5QrcodeScanner(
 function connexion(){
 
 let id = document.getElementById("identifiant").value;
-
 let code = document.getElementById("code").value;
-
 
 if(cartes[id] && cartes[id].code == code){
 
 utilisateurConnecte = cartes[id];
 
-
 document.getElementById("connexion").style.display="none";
-
 document.getElementById("application").style.display="block";
 
+if(utilisateurConnecte.admin){
 
 if(utilisateurConnecte.admin){
 
@@ -719,10 +716,14 @@ document.getElementById("adminPanel").style.display="none";
 
 }
 
+}
+
 }else{
 
 document.getElementById("erreur").innerHTML =
 "🔴 Identifiant ou code incorrect";
+
+}
 
 }
 
@@ -733,8 +734,6 @@ utilisateurConnecte = null;
 document.getElementById("application").style.display="none";
 
 document.getElementById("connexion").style.display="block";
-
-document.getElementById("adminPanel").style.display="none";
 
 }
   
