@@ -694,14 +694,14 @@ new Html5QrcodeScanner(
 
 function connexion(){
 
-let id=document.getElementById("identifiant").value;
+let id = document.getElementById("identifiant").value;
 
-let code=document.getElementById("code").value;
+let code = document.getElementById("code").value;
 
 
-if(comptes[id] && comptes[id].code==code){
+if(cartes[id] && cartes[id].code == code){
 
-utilisateurConnecte=comptes[id];
+utilisateurConnecte = cartes[id];
 
 
 document.getElementById("connexion").style.display="none";
@@ -709,25 +709,20 @@ document.getElementById("connexion").style.display="none";
 document.getElementById("application").style.display="block";
 
 
-alert(
-"Bienvenue "+utilisateurConnecte.nom
-);
+if(utilisateurConnecte.admin){
 
+document.getElementById("adminPanel").style.display="block";
 
 }else{
 
-document.getElementById("erreur").innerHTML=
-"🔴 Identifiant ou code incorrect";
+document.getElementById("adminPanel").style.display="none";
 
 }
 
-function deconnexion(){
+}else{
 
-utilisateurConnecte=null;
-
-document.getElementById("application").style.display="none";
-
-document.getElementById("connexion").style.display="block";
+document.getElementById("erreur").innerHTML =
+"🔴 Identifiant ou code incorrect";
 
 }
 
