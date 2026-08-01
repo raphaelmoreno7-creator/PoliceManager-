@@ -428,24 +428,48 @@ scanEnCours = false;
 
 function ajouterHistorique(texte){
 
-let h=document.getElementById("historique");
+let historique = JSON.parse(localStorage.getItem("historique")) || [];
 
-if(h.innerHTML=="Aucun scan enregistré."){
+historique.unshift(texte);
 
-h.innerHTML="";
+localStorage.setItem(
+"historique",
+JSON.stringify(historique)
+);
+
+afficherHistorique();
+
 }
 
-h.innerHTML=
-texte+"<hr>"+h.innerHTML;
+function afficherHistorique(){
+
+let h=document.getElementById("historique");
+
+let historique =
+JSON.parse(localStorage.getItem("historique")) || [];
+
+if(historique.length==0){
+
+h.innerHTML="Aucun scan enregistré.";
+
+return;
+
+}
+
+h.innerHTML = historique.join("<hr>");
 
 }
 
 function viderHistorique(){
 
+localStorage.removeItem("historique");
+
 document.getElementById("historique").innerHTML =
 "Aucun scan enregistré.";
 
 }
+
+afficherHistorique();
 
 new Html5QrcodeScanner(
 "reader",
