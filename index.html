@@ -304,7 +304,14 @@ let date=maintenant.toLocaleDateString("fr-FR");
 
 let heure=maintenant.toLocaleTimeString("fr-FR");
 
-if(cartes[code]){
+if(cartes[code]){ajouterHistorique(
+date+" - "+heure+
+"<br>"+
+action+
+" | "+
+c.nom+
+"<br>📍 "+lieu
+);
 
 let c=cartes[code];
 
@@ -374,14 +381,7 @@ r.innerHTML="🔴<br><br>CARTE INCONNUE<br><br>ACCÈS REFUSÉ";
 r.className="refus";
 
 }
-ajouterHistorique(
-date+" - "+heure+
-"<br>"+
-action+
-" | "+
-c.nom+
-"<br>📍 "+lieu
-);
+
 }
 
 function ajouterHistorique(texte){
@@ -395,6 +395,13 @@ h.innerHTML="";
 
 h.innerHTML=
 texte+"<hr>"+h.innerHTML;
+
+}
+
+function viderHistorique(){
+
+document.getElementById("historique").innerHTML =
+"Aucun scan enregistré.";
 
 }
 
