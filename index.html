@@ -135,6 +135,7 @@ Aucun scan enregistré.
 
 let action = "Entrée";
 let lieu = "";
+let scanEnCours = false;
 
 const cartes = {
 
@@ -292,7 +293,15 @@ type:"détenu"
 
 };
 
-function onScanSuccess(code){lieu = document.getElementById("lieu").value;
+function onScanSuccess(code){
+
+if(scanEnCours){
+return;
+}
+
+scanEnCours = true;
+
+lieu = document.getElementById("lieu").value;
 
 document.getElementById("bip").play();
 
@@ -410,6 +419,10 @@ r.innerHTML="🔴<br><br>CARTE INCONNUE<br><br>ACCÈS REFUSÉ";
 r.className="refus";
 
 }
+
+setTimeout(()=>{
+scanEnCours = false;
+},3000);  
 
 }
 
