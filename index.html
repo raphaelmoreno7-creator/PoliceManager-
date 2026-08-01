@@ -8,51 +8,197 @@
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
+
+*{
+box-sizing:border-box;
+}
+
 body{
-font-family:Arial, sans-serif;
-background:#071B2E;
+font-family:"Segoe UI", Arial, sans-serif;
+background:#061525;
 color:white;
-text-align:center;
 margin:0;
 padding:20px;
 }
 
-h1{
-margin-top:20px;
+
+/* En-tête */
+
+header{
+background:linear-gradient(135deg,#0b2a4a,#061525);
+padding:25px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+margin-bottom:20px;
 }
 
-#reader{
-width:320px;
-margin:auto;
+h1{
+margin:0;
+font-size:32px;
+}
+
+.subtitle{
+color:#9bb7d4;
+margin-top:8px;
+}
+
+
+/* Cartes */
+
+.card{
+
+background:#0d2238;
+border-radius:18px;
+padding:20px;
 margin-top:20px;
+box-shadow:0 8px 20px rgba(0,0,0,0.35);
+
+}
+
+
+/* Scanner */
+
+#reader{
+
+width:100%;
+max-width:400px;
+margin:auto;
 background:white;
 border-radius:15px;
 padding:10px;
+
 }
 
-#resultat{
-margin-top:25px;
-font-size:22px;
-font-weight:bold;
-}
 
-.valide{
-color:#4CFF4C;
-}
-
-.refus{
-color:#FF4C4C;
-}
+/* Boutons */
 
 button{
-margin-top:20px;
-padding:15px 30px;
-font-size:20px;
+
 border:none;
-border-radius:10px;
-background:#1E88E5;
+border-radius:12px;
+padding:15px 25px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+margin:8px;
 color:white;
+background:#1464b8;
+
+transition:0.2s;
+
 }
+
+
+button:hover{
+
+transform:scale(1.05);
+
+}
+
+
+button:active{
+
+transform:scale(0.95);
+
+}
+
+
+/* Entrée sortie */
+
+.btn-entree{
+
+background:#0aa84f;
+
+}
+
+
+.btn-sortie{
+
+background:#c62828;
+
+}
+
+
+/* Lieu */
+
+select{
+
+width:90%;
+padding:15px;
+border-radius:12px;
+background:#071b2e;
+color:white;
+border:1px solid #355b7d;
+font-size:16px;
+
+}
+
+
+/* Résultat scan */
+
+#resultat{
+
+margin-top:20px;
+font-size:22px;
+font-weight:bold;
+padding:20px;
+border-radius:15px;
+
+}
+
+
+.valide{
+
+background:#123d29;
+color:#5cff8d;
+
+}
+
+
+.refus{
+
+background:#451b1b;
+color:#ff6b6b;
+
+}
+
+
+/* Historique */
+
+#historique{
+
+background:#081827;
+padding:20px;
+border-radius:15px;
+max-height:300px;
+overflow-y:auto;
+text-align:left;
+
+}
+
+
+/* Titres */
+
+h2,h3{
+
+color:#5fa8ff;
+
+}
+
+
+/* Badge système */
+
+.status{
+
+display:inline-block;
+background:#083d24;
+color:#4cff8b;
+padding:8px 15px;
+border-radius:20px;
+font-weight:bold;
+
+}
+
 </style>
 
 </head>
