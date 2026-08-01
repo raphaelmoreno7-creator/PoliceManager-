@@ -704,20 +704,6 @@ utilisateurConnecte = cartes[id];
 document.getElementById("connexion").style.display="none";
 document.getElementById("application").style.display="block";
 
-if(utilisateurConnecte.admin){
-
-if(utilisateurConnecte.admin){
-
-document.getElementById("adminPanel").style.display="block";
-
-}else{
-
-document.getElementById("adminPanel").style.display="none";
-
-}
-
-}
-
 }else{
 
 document.getElementById("erreur").innerHTML =
@@ -725,18 +711,15 @@ document.getElementById("erreur").innerHTML =
 
 }
 
-}
+} // ← cette accolade ferme connexion()
 
 function deconnexion(){
 
 utilisateurConnecte = null;
 
 document.getElementById("application").style.display="none";
-
 document.getElementById("connexion").style.display="block";
 
-}
-  
 }
   
 </script>
