@@ -324,6 +324,9 @@ Aucun scan enregistré.
 <div id="adminPanel" class="card" style="display:none;">
 
 <h2>👑 Panneau administrateur</h2>
+<div id="statistiques" class="card"></div>
+
+<br>
 <hr>
 
 <h3>➕ Ajouter un utilisateur</h3>
@@ -372,6 +375,45 @@ Aucun scan enregistré.
 
 </div>
 
+ <div id="popupModification" class="card" style="display:none;">
+
+<h2>✏️ Modifier un utilisateur</h2>
+
+<input id="modId" readonly>
+
+<br><br>
+
+<input id="modNom" placeholder="Nom">
+
+<br><br>
+
+<input id="modGrade" placeholder="Grade">
+
+<br><br>
+
+<input id="modCode" placeholder="Code">
+
+<br><br>
+
+<label>
+
+<input type="checkbox" id="modAdmin">
+
+Administrateur
+
+</label>
+
+<br><br>
+
+<button onclick="enregistrerModification()">
+💾 Enregistrer
+</button>
+
+<button onclick="fermerModification()">
+❌ Annuler
+</button>
+
+</div>
 <audio id="bip">
 <source src="https://actions.google.com/sounds/v1/cartoon/pop.ogg">
 </audio>
@@ -768,6 +810,7 @@ if(utilisateurConnecte.admin){
 document.getElementById("adminPanel").style.display="block";
 
 afficherListeUtilisateurs();
+afficherStatistiques();
 
 }else{
 
@@ -787,6 +830,8 @@ function deconnexion(){
 
 utilisateurConnecte=null;
 
+let utilisateurModifie = "";
+
 document.getElementById("application").style.display="none";
 
 document.getElementById("connexion").style.display="block";
@@ -805,7 +850,11 @@ html+="<tr><th>ID</th><th>Nom</th><th>Grade</th><th>Type</th><th>Actions</th></t
 
 for(let id in cartes){
 
-html+="<td><button onclick=\"modifierUtilisateur('"+id+"')\">✏️ Modifier</button></td>";
+html+="<td>";
+html+="<button onclick=\"modifierUtilisateur('"+id+"')\">✏️</button> ";
+html+="<button onclick=\"modifierCode('"+id+"')\">🔒</button> ";
+html+="<button onclick=\"supprimerUtilisateur('"+id+"')\">🗑️</button>";
+html+="</td>";
 
 html+="<tr>";
 
@@ -871,6 +920,8 @@ sauvegarderCartes();
 
 afficherListeUtilisateurs();
 
+afficherStatistiques();
+
 alert("✅ Utilisateur ajouté.");
 
 }
@@ -886,29 +937,140 @@ JSON.stringify(cartes)
 
 function modifierUtilisateur(id){
 
-let nouveauNom=prompt("Nom :",cartes[id].nom);
+utilisateurModifie=id;
 
-if(nouveauNom==null)return;
+document.getElementById("popupModification").style.display="block";
 
-let nouveauGrade=prompt("Grade :",cartes[id].grade);
+document.getElementById("modId").value=id;
 
-if(nouveauGrade==null)return;
+document.getElementById("modNom").value=cartes[id].nom;
 
-let nouveauCode=prompt("Code :",cartes[id].code);
+document.getElementById("modGrade").value=cartes[id].grade || "";
 
-if(nouveauCode==null)return;
+document.getElementById("modCode").value=cartes[id].code || "";
 
-cartes[id].nom=nouveauNom;
+document.getElementById("modAdmin").checked=cartes[id].admin || false;
 
-cartes[id].grade=nouveauGrade;
+}
 
-cartes[id].code=nouveauCode;
+function supprimerUtilisateur(id){
+
+if(id=="POL-001" || id=="PER-003"){
+
+alert("❌ Cet administrateur ne peut pas être supprimé.");
+
+return;
+
+}
+
+if(!confirm("Supprimer "+cartes[id].nom+" ?")){
+
+return;
+
+}
+
+delete cartes[id];
 
 sauvegarderCartes();
 
 afficherListeUtilisateurs();
 
-alert("✅ Utilisateur modifié.");
+afficherStatistiques();
+
+alert("✅ Utilisateur supprimé.");
+
+}
+
+function modifierCode(id){
+
+let nouveauCode = prompt(
+"Nouveau code pour " + cartes[id].nom + " :",
+cartes[id].code || ""
+);
+
+if(nouveauCode === null){
+    return;
+}
+
+nouveauCode = nouveauCode.trim();
+
+if(nouveauCode === ""){
+    alert("❌ Le code ne peut pas être vide.");
+    return;
+}
+
+cartes[id].code = nouveauCode;
+
+sauvegarderCartes();
+
+alert("✅ Code modifié avec succès.");
+
+}
+
+function enregistrerModification(){
+
+cartes[utilisateurModifie].nom=
+document.getElementById("modNom").value;
+
+cartes[utilisateurModifie].grade=
+document.getElementById("modGrade").value;
+
+cartes[utilisateurModifie].code=
+document.getElementById("modCode").value;
+
+cartes[utilisateurModifie].admin=
+document.getElementById("modAdmin").checked;
+
+sauvegarderCartes();
+
+afficherListeUtilisateurs();
+
+afficherStatistiques();
+
+fermerModification();
+
+}
+
+function fermerModification(){
+
+document.getElementById("popupModification").style.display="none";
+
+}
+
+function afficherStatistiques(){
+
+let policiers=0;
+let personnel=0;
+let detenus=0;
+let invites=0;
+
+for(let id in cartes){
+
+if(cartes[id].type=="policier") policiers++;
+
+if(cartes[id].type=="personnel") personnel++;
+
+if(cartes[id].type=="détenu") detenus++;
+
+if(cartes[id].type=="invite") invites++;
+
+}
+
+document.getElementById("statistiques").innerHTML=
+
+"<h3>📊 Tableau de bord</h3>"+
+
+"👮 Policiers : <b>"+policiers+"</b><br><br>"+
+
+"🧹 Personnel : <b>"+personnel+"</b><br><br>"+
+
+"👤 Détenus : <b>"+detenus+"</b><br><br>"+
+
+"🟡 Invités : <b>"+invites+"</b><br><br>"+
+
+"<hr>"+
+
+"<b>📋 Total : "+(policiers+personnel+detenus+invites)+" utilisateurs</b>";
 
 }
   
