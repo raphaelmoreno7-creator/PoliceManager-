@@ -315,10 +315,6 @@ Aucun scan enregistré.
 
 <br>
 
-<button onclick="viderHistorique()">
-🗑️ Effacer l'historique
-</button>
-
 </div>
 
 <div id="adminPanel" class="card" style="display:none;">
@@ -375,7 +371,7 @@ Aucun scan enregistré.
 
 </div>
 
- <div id="popupModification" class="card" style="display:none;">
+<div id="popupModification" class="card" style="display:none;">
 
 <h2>✏️ Modifier un utilisateur</h2>
 
@@ -431,6 +427,10 @@ Administrateur
 
 <hr>
 
+<button onclick="viderHistorique()">
+🗑️ Effacer l'historique
+</button>
+
 <h3>📋 Journal d'administration</h3>
 
 <div id="journalAdmin"
@@ -455,13 +455,7 @@ let action = "Entrée";
 let lieu = "";
 let scanEnCours = false;
 
-const cartes = {let cartesSauvegardees = JSON.parse(localStorage.getItem("cartes"));
-
-if(cartesSauvegardees){
-
-Object.assign(cartes, cartesSauvegardees);
-
-}
+const cartes = {
 
 "POL-001":{
 nom:"Raphaël MORENO",
@@ -635,6 +629,14 @@ type:"détenu"
 "DET-010":{
 nom:"Nathan BLANC",
 type:"détenu"
+}
+
+let cartesSauvegardees = JSON.parse(localStorage.getItem("cartes"));
+
+if(cartesSauvegardees){
+
+Object.assign(cartes, cartesSauvegardees);
+
 }
 
 };
@@ -862,8 +864,6 @@ function deconnexion(){
 
 utilisateurConnecte=null;
 
-let utilisateurModifie = "";
-
 document.getElementById("application").style.display="none";
 
 document.getElementById("connexion").style.display="block";
@@ -882,14 +882,21 @@ html+="<tr><th>ID</th><th>Nom</th><th>Grade</th><th>Type</th><th>Actions</th></t
 
 for(let id in cartes){
 
+html+="<tr>";
+
+html+="<td>"+id+"</td>";
+html+="<td>"+cartes[id].nom+"</td>";
+html+="<td>"+(cartes[id].grade||"-")+"</td>";
+html+="<td>"+cartes[id].type+"</td>";
+
 html+="<td>";
-html+="<button onclick=\"voirUtilisateur('"+id+"')\">👁️</button> ";
-html+="<button onclick=\"modifierUtilisateur('"+id+"')\">✏️</button> ";
-html+="<button onclick=\"modifierCode('"+id+"')\">🔒</button> ";
+html+="<button onclick=\"voirUtilisateur('"+id+"')\">👁️</button>";
+html+="<button onclick=\"modifierUtilisateur('"+id+"')\">✏️</button>";
+html+="<button onclick=\"modifierCode('"+id+"')\">🔒</button>";
 html+="<button onclick=\"supprimerUtilisateur('"+id+"')\">🗑️</button>";
 html+="</td>";
 
-html+="<tr>";
+html+="</tr>";
 
 html+="<td>"+id+"</td>";
 
@@ -1165,7 +1172,7 @@ let heure = maintenant.toLocaleTimeString("fr-FR");
 
 journal.unshift(
 date+" - "+heure+
-"<br>👑 "+utilisateurConnecte.nom+
+"<br>👑 "+(utilisateurConnecte ? utilisateurConnecte.nom : "Système")+
 "<br>"+message
 );
 
