@@ -873,6 +873,7 @@ function deconnexion(){
 
 utilisateurConnecte = null;
 
+document.getElementById("erreur").innerHTML="";
 document.getElementById("application").style.display="none";
 document.getElementById("connexion").style.display="block";
 document.getElementById("adminPanel").style.display="none";
@@ -1080,6 +1081,11 @@ alert("✅ Code modifié avec succès.");
 
 function enregistrerModification(){
 
+if(document.getElementById("modCode").value.trim()==""){
+    alert("Le code est obligatoire.");
+    return;
+}
+
 cartes[utilisateurModifie].nom=
 document.getElementById("modNom").value;
 
@@ -1101,11 +1107,6 @@ afficherListeUtilisateurs();
 afficherStatistiques();
 
 fermerModification();
-
-if(document.getElementById("modCode").value.trim()==""){
-    alert("Le code est obligatoire.");
-    return;
-}
 
 function fermerModification(){
 
