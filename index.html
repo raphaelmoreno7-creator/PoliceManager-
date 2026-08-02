@@ -414,6 +414,37 @@ Administrateur
 </button>
 
 </div>
+
+ <div id="ficheUtilisateur" class="card" style="display:none;">
+
+<h2>👤 Fiche utilisateur</h2>
+
+<div id="contenuFiche"></div>
+
+<br>
+
+<button onclick="fermerFiche()">
+❌ Fermer
+</button>
+
+</div>
+
+<hr>
+
+<h3>📋 Journal d'administration</h3>
+
+<div id="journalAdmin"
+style="
+background:#081827;
+padding:15px;
+border-radius:10px;
+max-height:250px;
+overflow-y:auto;
+">
+
+Aucune action.
+
+</div>
 <audio id="bip">
 <source src="https://actions.google.com/sounds/v1/cartoon/pop.ogg">
 </audio>
@@ -811,6 +842,7 @@ document.getElementById("adminPanel").style.display="block";
 
 afficherListeUtilisateurs();
 afficherStatistiques();
+afficherJournal();
 
 }else{
 
@@ -851,6 +883,7 @@ html+="<tr><th>ID</th><th>Nom</th><th>Grade</th><th>Type</th><th>Actions</th></t
 for(let id in cartes){
 
 html+="<td>";
+html+="<button onclick=\"voirUtilisateur('"+id+"')\">👁️</button> ";
 html+="<button onclick=\"modifierUtilisateur('"+id+"')\">✏️</button> ";
 html+="<button onclick=\"modifierCode('"+id+"')\">🔒</button> ";
 html+="<button onclick=\"supprimerUtilisateur('"+id+"')\">🗑️</button>";
@@ -918,6 +951,8 @@ admin:admin
 
 sauvegarderCartes();
 
+ajouterJournal("➕ Utilisateur ajouté : "+id);
+
 afficherListeUtilisateurs();
 
 afficherStatistiques();
@@ -973,6 +1008,8 @@ delete cartes[id];
 
 sauvegarderCartes();
 
+ajouterJournal("🗑️ Utilisateur supprimé : "+id);
+
 afficherListeUtilisateurs();
 
 afficherStatistiques();
@@ -1003,6 +1040,8 @@ cartes[id].code = nouveauCode;
 
 sauvegarderCartes();
 
+ajouterJournal("🔒 Code modifié : "+id);
+
 alert("✅ Code modifié avec succès.");
 
 }
@@ -1022,6 +1061,8 @@ cartes[utilisateurModifie].admin=
 document.getElementById("modAdmin").checked;
 
 sauvegarderCartes();
+
+ajouterJournal("✏️ Utilisateur modifié : "+utilisateurModifie);
 
 afficherListeUtilisateurs();
 
@@ -1071,6 +1112,85 @@ document.getElementById("statistiques").innerHTML=
 "<hr>"+
 
 "<b>📋 Total : "+(policiers+personnel+detenus+invites)+" utilisateurs</b>";
+
+}
+
+function voirUtilisateur(id){
+
+let u = cartes[id];
+
+let html="";
+
+html+="<h3>"+u.nom+"</h3>";
+
+html+="<hr>";
+
+html+="<b>🆔 Identifiant :</b> "+id+"<br><br>";
+
+html+="<b>👤 Nom :</b> "+u.nom+"<br><br>";
+
+html+="<b>🎖 Grade :</b> "+(u.grade || "-")+"<br><br>";
+
+html+="<b>🏢 Type :</b> "+u.type+"<br><br>";
+
+if(u.code){
+
+html+="<b>🔐 Code :</b> "+u.code+"<br><br>";
+
+}
+
+html+="<b>👑 Administrateur :</b> "+(u.admin ? "Oui" : "Non")+"<br><br>";
+
+document.getElementById("contenuFiche").innerHTML=html;
+
+document.getElementById("ficheUtilisateur").style.display="block";
+
+}
+
+function fermerFiche(){
+
+document.getElementById("ficheUtilisateur").style.display="none";
+
+}
+
+function ajouterJournal(message){
+
+let journal = JSON.parse(localStorage.getItem("journalAdmin")) || [];
+
+let maintenant = new Date();
+
+let date = maintenant.toLocaleDateString("fr-FR");
+
+let heure = maintenant.toLocaleTimeString("fr-FR");
+
+journal.unshift(
+date+" - "+heure+
+"<br>👑 "+utilisateurConnecte.nom+
+"<br>"+message
+);
+
+localStorage.setItem(
+"journalAdmin",
+JSON.stringify(journal)
+);
+
+afficherJournal();
+
+}
+
+function afficherJournal(){
+
+let journal = JSON.parse(localStorage.getItem("journalAdmin")) || [];
+
+if(journal.length==0){
+
+document.getElementById("journalAdmin").innerHTML="Aucune action.";
+
+return;
+
+}
+
+document.getElementById("journalAdmin").innerHTML=journal.join("<hr>");
 
 }
   
