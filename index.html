@@ -427,7 +427,7 @@ Administrateur
 
 <hr>
 
-<button onclick="viderHistorique()">
+<button id="btnHistorique" onclick="viderHistorique()">
 🗑️ Effacer l'historique
 </button>
 
@@ -631,6 +631,8 @@ nom:"Nathan BLANC",
 type:"détenu"
 }
 
+},
+
 let cartesSauvegardees = JSON.parse(localStorage.getItem("cartes"));
 
 if(cartesSauvegardees){
@@ -647,7 +649,10 @@ let utilisateurModifie = "";
 
 function onScanSuccess(code){
 
-if(scanEnCours){
+if(
+scanEnCours ||
+document.getElementById("popupModification").style.display=="block"
+){
 return;
 }
 
@@ -843,6 +848,7 @@ document.getElementById("application").style.display="block";
 if(utilisateurConnecte.admin){
 
 document.getElementById("adminPanel").style.display="block";
+document.getElementById("btnHistorique").style.display="inline-block";
 
 afficherListeUtilisateurs();
 afficherStatistiques();
@@ -851,6 +857,7 @@ afficherJournal();
 }else{
 
 document.getElementById("adminPanel").style.display="none";
+document.getElementById("btnHistorique").style.display="none";
 
 }
 
@@ -864,13 +871,12 @@ document.getElementById("erreur").innerHTML="🔴 Identifiant ou code incorrect"
 
 function deconnexion(){
 
-utilisateurConnecte=null;
+utilisateurConnecte = null;
 
 document.getElementById("application").style.display="none";
-
 document.getElementById("connexion").style.display="block";
-
 document.getElementById("adminPanel").style.display="none";
+document.getElementById("btnHistorique").style.display="none";
 
 }
 
@@ -897,16 +903,6 @@ html+="<button onclick=\"modifierUtilisateur('"+id+"')\">✏️</button>";
 html+="<button onclick=\"modifierCode('"+id+"')\">🔒</button>";
 html+="<button onclick=\"supprimerUtilisateur('"+id+"')\">🗑️</button>";
 html+="</td>";
-
-html+="</tr>";
-
-html+="<td>"+id+"</td>";
-
-html+="<td>"+cartes[id].nom+"</td>";
-
-html+="<td>"+(cartes[id].grade||"-")+"</td>";
-
-html+="<td>"+cartes[id].type+"</td>";
 
 html+="</tr>";
 
@@ -948,6 +944,19 @@ return;
 
 }
 
+if(
+!id.startsWith("POL-") &&
+!id.startsWith("PER-") &&
+!id.startsWith("DET-") &&
+!id.startsWith("INV-")
+){
+
+alert("❌ L'identifiant doit commencer par POL-, PER-, DET- ou INV-.");
+
+return;
+
+}
+
 cartes[id]={
 
 nom:nom,
@@ -967,6 +976,12 @@ afficherListeUtilisateurs();
 afficherStatistiques();
 
 alert("✅ Utilisateur ajouté.");
+
+document.getElementById("ajoutId").value="";
+document.getElementById("ajoutNom").value="";
+document.getElementById("ajoutGrade").value="";
+document.getElementById("ajoutCode").value="";
+document.getElementById("ajoutAdmin").checked=false;
 
 }
 
@@ -998,6 +1013,14 @@ document.getElementById("modAdmin").checked=cartes[id].admin || false;
 }
 
 function supprimerUtilisateur(id){
+
+if(cartes[id]===utilisateurConnecte){
+
+alert("❌ Vous ne pouvez pas supprimer votre propre compte.");
+
+return;
+
+}
 
 if(id=="POL-001" || id=="PER-003"){
 
@@ -1079,6 +1102,9 @@ afficherStatistiques();
 
 fermerModification();
 
+if(document.getElementById("modCode").value.trim()==""){
+    alert("Le code est obligatoire.");
+    return;
 }
 
 function fermerModification(){
