@@ -423,8 +423,6 @@ Administrateur
 ❌ Fermer
 </button>
 
-</div>
-
 <hr>
 
 <button id="btnHistorique" onclick="viderHistorique()">
@@ -641,8 +639,6 @@ Object.assign(cartes, cartesSauvegardees);
 
 }
 
-};
-
 let utilisateurConnecte = null;
 
 let utilisateurModifie = "";
@@ -826,24 +822,42 @@ document.getElementById("historique").innerHTML =
 
 }
 
-afficherHistorique();
+let scanner = null;
 
-new Html5QrcodeScanner(
+function demarrerScanner(){
+
+if(scanner){
+return;
+}
+
+scanner = new Html5QrcodeScanner(
 "reader",
-{fps:10, qrbox:250}
-).render(onScanSuccess);
+{
+fps:10,
+qrbox:250
+}
+);
+
+scanner.render(onScanSuccess);
+
+}
 
 function connexion(){
 
-let id=document.getElementById("identifiant").value;
-let code=document.getElementById("code").value;
+let id=document.getElementById("identifiant").value.trim().toUpperCase();
+let code=document.getElementById("code").value.trim();
 
 if(cartes[id] && cartes[id].code==code){
 
 utilisateurConnecte=cartes[id];
 
+document.getElementById("erreur").innerHTML="";
 document.getElementById("connexion").style.display="none";
 document.getElementById("application").style.display="block";
+
+demarrerScanner();
+afficherHistorique();
+afficherJournal();
 
 if(utilisateurConnecte.admin){
 
@@ -1108,12 +1122,10 @@ afficherStatistiques();
 
 fermerModification();
 
-function fermerModification(){
-
 }
 
-document.getElementById("popupModification").style.display="none";
-
+function fermerModification(){
+    document.getElementById("popupModification").style.display="none";
 }
 
 function afficherStatistiques(){
@@ -1231,6 +1243,15 @@ return;
 document.getElementById("journalAdmin").innerHTML=journal.join("<hr>");
 
 }
+
+window.onload = function(){
+
+    afficherHistorique();
+
+    afficherJournal();
+
+}
+
   
 </script>
 
