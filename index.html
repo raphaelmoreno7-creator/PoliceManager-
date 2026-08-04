@@ -324,6 +324,10 @@ Aucun scan enregistré.
 <button id="btnHistorique" onclick="viderHistorique()" style="display:none;">
 🗑️ Effacer l'historique
 </button>
+
+<button onclick="viderJournal()">
+🗑️ Vider le journal
+</button>
  
 <div id="statistiques" class="card"></div>
 
@@ -457,6 +461,9 @@ Administrateur
 let action = "Entrée";
 let lieu = "";
 let scanEnCours = false;
+
+let dernierQR = "";
+let dernierScan = 0;
 
 const cartes = {
 
@@ -657,6 +664,15 @@ document.getElementById("popupModification").style.display=="block"
 return;
 }
 
+let maintenant = Date.now();
+
+if(code == dernierQR && maintenant - dernierScan < 3000){
+    return;
+}
+
+dernierQR = code;
+dernierScan = maintenant;
+
 scanEnCours = true;
 
 lieu = document.getElementById("lieu").value;
@@ -820,9 +836,13 @@ h.innerHTML = historique.join("<hr>");
 
 function viderHistorique(){
 
+if(!confirm("Supprimer tout l'historique ?")){
+    return;
+}
+
 localStorage.removeItem("historique");
 
-document.getElementById("historique").innerHTML =
+document.getElementById("historique").innerHTML=
 "Aucun scan enregistré.";
 
 }
@@ -899,6 +919,14 @@ document.getElementById("adminPanel").style.display="none";
 document.getElementById("btnHistorique").style.display="none";
 
 }
+ 
+if(scanner){
+
+scanner.clear();
+
+scanner=null;
+
+}
 
 function afficherListeUtilisateurs(){
 
@@ -920,7 +948,12 @@ html+="<td>"+cartes[id].type+"</td>";
 html+="<td>";
 html+="<button onclick=\"voirUtilisateur('"+id+"')\">👁️</button>";
 html+="<button onclick=\"modifierUtilisateur('"+id+"')\">✏️</button>";
-html+="<button onclick=\"modifierCode('"+id+"')\">🔒</button>";
+if(
+cartes[id].type=="policier" ||
+cartes[id].type=="personnel"
+){
+    html+="<button onclick=\"modifierCode('"+id+"')\">🔒</button>";
+}
 html+="<button onclick=\"supprimerUtilisateur('"+id+"')\">🗑️</button>";
 html+="</td>";
 
@@ -936,13 +969,71 @@ document.getElementById("listeUtilisateurs").innerHTML=html;
 
 function ajouterUtilisateur(){
 
-let id=document.getElementById("ajoutId").value.trim();
+let id=document.getElementById("ajoutId").value.trim().toUpperCase();
 
 let nom=document.getElementById("ajoutNom").value.trim();
 
 let grade=document.getElementById("ajoutGrade").value.trim();
 
 let type=document.getElementById("ajoutType").value;
+
+ if(type=="policier" && !id.startsWith("POL-")){
+    alert("❌ Un policier doit avoir un identifiant POL-");
+    return;
+}
+
+if(type=="personnel" && !id.startsWith("PER-")){
+    alert("❌ Un membre du personnel doit avoir un identifiant PER-");
+    return;
+}
+
+if(type=="détenu" && !id.startsWith("DET-")){
+    alert("❌ Un détenu doit avoir un identifiant DET-");
+    return;
+}
+
+if(type=="invite" && !id.startsWith("INV-")){
+    alert("❌ Un invité doit avoir un identifiant INV-");
+    return;
+}
+
+if(code!=""){
+
+    for(let x in cartes){
+
+        if(cartes[x].code==code){
+
+            alert("❌ Ce code est déjà utilisé.");
+
+            return;
+
+        }
+
+    }
+
+}
+
+for(let x in cartes){
+
+    if(cartes[x].nom.toLowerCase()==nom.toLowerCase()){
+
+        alert("❌ Cette personne existe déjà.");
+
+        return;
+
+    }
+
+}
+
+let modele = /^(POL|PER|DET|INV)-\d{3}$/;
+
+if(!modele.test(id)){
+
+    alert("❌ Format invalide.\nExemple : POL-011");
+
+    return;
+
+}
 
 let code=document.getElementById("ajoutCode").value.trim();
 
@@ -953,6 +1044,17 @@ alert("Veuillez remplir l'identifiant et le nom.");
 return;
 }
 
+if(
+(type=="détenu" || type=="invite")
+&& admin
+){
+
+alert("Un détenu ou un invité ne peut pas être administrateur.");
+
+return;
+
+}
+
 if(cartes[id]){
 
 alert("Cet identifiant existe déjà.");
@@ -961,17 +1063,43 @@ return;
 
 }
 
+let modele = /^(POL|PER|DET|INV)-\d{3}$/;
+
 if(
-!id.startsWith("POL-") &&
-!id.startsWith("PER-") &&
-!id.startsWith("DET-") &&
-!id.startsWith("INV-")
+!/^POL-\d{3}$/.test(id) &&
+!/^PER-\d{3}$/.test(id) &&
+!/^DET-\d{3}$/.test(id) &&
+!/^INV-\d{3}$/.test(id)
 ){
 
-alert("❌ L'identifiant doit commencer par POL-, PER-, DET- ou INV-.");
+alert(
+"❌ Format invalide.\n\nExemples :\nPOL-011\nPER-007\nDET-003\nINV-001"
+);
 
 return;
 
+}
+
+let prefixe=id.split("-")[0];
+
+if(type=="policier" && prefixe!="POL"){
+alert("❌ Un policier doit avoir un identifiant POL-");
+return;
+}
+
+if(type=="personnel" && prefixe!="PER"){
+alert("❌ Un membre du personnel doit avoir un identifiant PER-");
+return;
+}
+
+if(type=="détenu" && prefixe!="DET"){
+alert("❌ Un détenu doit avoir un identifiant DET-");
+return;
+}
+
+if(type=="invite" && prefixe!="INV"){
+alert("❌ Un invité doit avoir un identifiant INV-");
+return;
 }
 
 cartes[id]={
@@ -1016,16 +1144,24 @@ function modifierUtilisateur(id){
 utilisateurModifie=id;
 
 document.getElementById("popupModification").style.display="block";
-
 document.getElementById("modId").value=id;
-
 document.getElementById("modNom").value=cartes[id].nom;
-
 document.getElementById("modGrade").value=cartes[id].grade || "";
-
 document.getElementById("modCode").value=cartes[id].code || "";
-
 document.getElementById("modAdmin").checked=cartes[id].admin || false;
+
+if(
+cartes[id].type=="détenu" ||
+cartes[id].type=="invite"
+){
+
+document.getElementById("modAdmin").disabled=true;
+
+}else{
+
+document.getElementById("modAdmin").disabled=false;
+
+}
 
 }
 
@@ -1259,6 +1395,18 @@ window.onload = function(){
     afficherHistorique();
 
     afficherJournal();
+
+}
+
+function viderJournal(){
+
+if(!confirm("Supprimer le journal d'administration ?")){
+    return;
+}
+
+localStorage.removeItem("journalAdmin");
+
+afficherJournal();
 
 }
 
