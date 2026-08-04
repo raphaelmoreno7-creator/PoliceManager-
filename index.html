@@ -319,16 +319,10 @@ Aucun scan enregistré.
 
 <div id="adminPanel" class="card" style="display:none;">
 
-<button id="btnHistorique" onclick="viderHistorique()">
-🗑️ Effacer l'historique
-</button>
-
 <h2>👑 Panneau administrateur</h2>
 
 <button id="btnHistorique" onclick="viderHistorique()" style="display:none;">
-
 🗑️ Effacer l'historique
-
 </button>
  
 <div id="statistiques" class="card"></div>
@@ -387,6 +381,19 @@ Aucun scan enregistré.
 
 <div id="listeUtilisateurs"></div>
 
+<h3>📋 Journal d'administration</h3>
+
+<div id="journalAdmin"
+style="
+background:#081827;
+padding:15px;
+border-radius:10px;
+max-height:250px;
+overflow-y:auto;
+">
+
+Aucune action.
+
 </div>
 
 <div id="popupModification" class="card" style="display:none;">
@@ -441,20 +448,6 @@ Administrateur
 ❌ Fermer
 </button>
 
-<h3>📋 Journal d'administration</h3>
-
-<div id="journalAdmin"
-style="
-background:#081827;
-padding:15px;
-border-radius:10px;
-max-height:250px;
-overflow-y:auto;
-">
-
-Aucune action.
-
-</div>
 <audio id="bip">
 <source src="https://actions.google.com/sounds/v1/cartoon/pop.ogg">
 </audio>
@@ -1195,15 +1188,10 @@ let u = cartes[id];
 let html="";
 
 html+="<h3>"+u.nom+"</h3>";
-
 html+="<hr>";
-
 html+="<b>🆔 Identifiant :</b> "+id+"<br><br>";
-
 html+="<b>👤 Nom :</b> "+u.nom+"<br><br>";
-
 html+="<b>🎖 Grade :</b> "+(u.grade || "-")+"<br><br>";
-
 html+="<b>🏢 Type :</b> "+u.type+"<br><br>";
 
 if(u.code){
@@ -1215,7 +1203,6 @@ html+="<b>🔐 Code :</b> "+u.code+"<br><br>";
 html+="<b>👑 Administrateur :</b> "+(u.admin ? "Oui" : "Non")+"<br><br>";
 
 document.getElementById("contenuFiche").innerHTML=html;
-
 document.getElementById("ficheUtilisateur").style.display="block";
 
 }
