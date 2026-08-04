@@ -871,13 +871,17 @@ afficherJournal();
 document.getElementById("adminPanel").style.display="none";
 document.getElementById("btnHistorique").style.display="none";
 
+<hr>
+
+<button id="btnHistorique" onclick="viderHistorique()">
+🗑️ Effacer l'historique
+</button>
+ 
 }
 
 }else{
 
 document.getElementById("erreur").innerHTML="🔴 Identifiant ou code incorrect";
-
-}
 
 }
 
