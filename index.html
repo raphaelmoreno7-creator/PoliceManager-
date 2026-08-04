@@ -324,6 +324,13 @@ Aucun scan enregistré.
 </button>
 
 <h2>👑 Panneau administrateur</h2>
+
+<button id="btnHistorique" onclick="viderHistorique()" style="display:none;">
+
+🗑️ Effacer l'historique
+
+</button>
+ 
 <div id="statistiques" class="card"></div>
 
 <br>
@@ -871,17 +878,13 @@ afficherJournal();
 document.getElementById("adminPanel").style.display="none";
 document.getElementById("btnHistorique").style.display="none";
 
-<hr>
-
-<button id="btnHistorique" onclick="viderHistorique()">
-🗑️ Effacer l'historique
-</button>
- 
 }
 
 }else{
 
 document.getElementById("erreur").innerHTML="🔴 Identifiant ou code incorrect";
+
+}
 
 }
 
