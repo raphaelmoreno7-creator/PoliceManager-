@@ -1104,8 +1104,15 @@ alert("✅ Code modifié avec succès.");
 
 function enregistrerModification(){
 
-if(document.getElementById("modCode").value.trim()==""){
-    alert("Le code est obligatoire.");
+let code = document.getElementById("modCode").value.trim();
+
+let type = cartes[utilisateurModifie].type;
+
+if(
+(type=="policier" || type=="personnel") 
+&& code==""
+){
+    alert("Le code est obligatoire pour les policiers et le personnel.");
     return;
 }
 
@@ -1115,8 +1122,15 @@ document.getElementById("modNom").value;
 cartes[utilisateurModifie].grade=
 document.getElementById("modGrade").value;
 
-cartes[utilisateurModifie].code=
-document.getElementById("modCode").value;
+if(type=="policier" || type=="personnel"){
+
+cartes[utilisateurModifie].code = code;
+
+}else{
+
+delete cartes[utilisateurModifie].code;
+
+}
 
 cartes[utilisateurModifie].admin=
 document.getElementById("modAdmin").checked;
